@@ -20,6 +20,18 @@
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                         {{ __('Usuários') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('configuracoes.edit')" :active="request()->routeIs('configuracoes.*')">
+                        {{ __('Configurações') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')">
+                        {{ __('Clientes') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('fornecedores.index')" :active="request()->routeIs('fornecedores.*')">
+                        {{ __('Fornecedores') }}
+                    </x-nav-link>
                     @endrole
                 </div>
             </div>
@@ -87,6 +99,17 @@
             @role('Admin')
             <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                 {{ __('Usuários') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('configuracoes.edit')" :active="request()->routeIs('configuracoes.*')">
+                {{ __('Configurações') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')">
+                {{ __('Clientes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('fornecedores.index')" :active="request()->routeIs('fornecedores.*')">
+                {{ __('Fornecedores') }}
             </x-responsive-nav-link>
             @endrole
         </div>

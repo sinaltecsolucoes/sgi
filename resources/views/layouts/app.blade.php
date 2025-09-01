@@ -17,7 +17,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div x-data class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
@@ -34,6 +34,7 @@
             {{ $slot }}
         </main>
     </div>
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
@@ -56,6 +57,8 @@
             })
         </script>
     @endif
+
+    @stack('scripts')
 
 </body>
 

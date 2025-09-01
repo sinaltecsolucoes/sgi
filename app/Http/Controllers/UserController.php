@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash; // Criptografa a senha
 use Illuminate\Validation\Rules; // Adiciona regras de senha
 use Illuminate\Validation\Rule;
+use App\Models\Audit;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -87,7 +89,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    /*public function update(Request $request, User $user)
     {
         // 1. Validação dos dados (com uma regra especial para o email)
         $request->validate([
@@ -114,6 +116,53 @@ class UserController extends Controller
         $user->syncRoles($request->role);
 
         // 5. Redireciona de volta para a lista com a mensagem de sucesso
+        return redirect()->route('users.index')
+            ->with('success', 'Usuário atualizado com sucesso!');
+    }*/
+
+    public function update(Request $request, User $user)
+    {
+        // 1. Validação
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', \Illuminate\Validation\Rule::unique(User::class)->ignore($user->id)],
+            'password' => ['nullable', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+            'role' => ['required', 'string', 'exists:roles,name'],
+        ]);
+
+        // Captura o nome do cargo ANTES da alteração
+        $oldRole = $user->getRoleNames()->implode(', ');
+        $newRole = $request->role;
+
+        // Atualiza os dados do usuário (nome, email, senha)
+        $user->fill($request->only(['name', 'email']));
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save(); // Isso já deve criar a auditoria para nome/email, se houver mudança
+
+        // Sincroniza o cargo
+        $user->syncRoles($newRole);
+
+        // ================== CRIAÇÃO MANUAL DA AUDITORIA DO CARGO ==================
+        // Se o cargo realmente mudou, nós criamos o registro na mão
+        if ($oldRole !== $newRole) {
+            Audit::create([
+                'user_id' => Auth::id(), // O usuário que está fazendo a ação
+                'user_type' => User::class, 
+                'event' => 'updated',
+                'auditable_type' => User::class,
+                'auditable_id' => $user->id, // O usuário que está sendo modificado
+                'old_values' => ['role' => $oldRole],
+                'new_values' => ['role' => $newRole],
+                'url' => request()->fullUrl(),
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+        // ==========================================================================
+
+        // Redireciona com a mensagem de sucesso
         return redirect()->route('users.index')
             ->with('success', 'Usuário atualizado com sucesso!');
     }
