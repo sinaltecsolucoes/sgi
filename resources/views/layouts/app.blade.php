@@ -14,6 +14,13 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- CSS DO DATATABLES --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+
+    {{-- CSS DA EXTENSÃO RESPONSIVE ABAIXO --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css" />
+
 </head>
 
 <body class="font-sans antialiased">
@@ -23,7 +30,7 @@
         <!-- Page Heading -->
         @isset($header)
             <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>
@@ -31,7 +38,11 @@
 
         <!-- Page Content -->
         <main>
-            {{ $slot }}
+            <div class="py-12">
+                <div class="mx-auto sm:px-6 lg:px-8"> {{-- max-w-7xl removido daqui --}}
+                    {{ $slot }}
+                </div>
+            </div>
         </main>
     </div>
 
@@ -57,6 +68,14 @@
             })
         </script>
     @endif
+
+    {{-- JQUERY E JS DO DATATABLES --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+
+    {{-- ADICIONE O JS DA EXTENSÃO RESPONSIVE ABAIXO --}}
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+
 
     @stack('scripts')
 
