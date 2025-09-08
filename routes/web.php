@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
 
     // ROTAS DE PRODUTOS
     Route::resource('produtos', ProdutoController::class)->middleware(['role:Admin']);
+    Route::get('/produtos-primarios', [ProdutoController::class, 'getProdutosPrimarios'])->name('produtos.primarios')->middleware(['role:Admin']);
+    //Route::get('/produtos/buscar-primarios', [ProdutoController::class, 'buscarProdutosPrimarios'])->name('produtos.buscarPrimarios')->middleware(['role:Admin']);
+    Route::get('/produtos/buscar/primarios', [ProdutoController::class, 'buscarProdutosPrimarios'])->name('produtos.buscar.primarios')->middleware(['role:Admin']);
+
 
     // ROTAS PARA GERENCIAMENTO DE ENDEREÇOS (serão chamadas via AJAX)
     Route::prefix('entidades/{entidade}')->name('enderecos.')->middleware(['role:Admin'])->group(function () {

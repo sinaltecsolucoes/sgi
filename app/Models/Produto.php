@@ -33,6 +33,7 @@ class Produto extends Model implements Auditable
         'prod_fator_producao',
         'prod_tipo_embalagem',
         'prod_peso_embalagem',
+        'prod_especie_embalagem',
         'prod_total_pecas',
         'prod_validade_meses',
         'prod_primario_id',
@@ -47,6 +48,7 @@ class Produto extends Model implements Auditable
     {
         return $this->belongsTo(Produto::class, 'prod_primario_id', 'prod_codigo');
     }
+   
 
     /**
      * Relacionamento: Os produtos secundários que contêm este produto (primário).
